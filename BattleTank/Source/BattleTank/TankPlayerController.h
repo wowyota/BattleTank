@@ -23,6 +23,7 @@ public:
 
 	void AimTowardsCrosshair();
 
+	UFUNCTION(BlueprintCallable, Category = Firing)
 	bool GetSightRayHitLocation(FVector &HitLocation) const;
 
 	UPROPERTY(EditAnywhere)
