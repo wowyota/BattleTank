@@ -2,9 +2,9 @@
 
 #pragma once
 
+#include "TankBarrel.h"
 #include "Components/ActorComponent.h"
 #include "AimComponent.generated.h"
-
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UAimComponent : public UActorComponent
@@ -23,15 +23,17 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 		
-	void AimAt(const FVector &AimLocation);
-
-	UStaticMeshComponent* Barrel;
-
-	void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
-
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float LaunchSpeed = 10000.f;
 
 	UPROPERTY(EditAnywhere, Category = Firing)
-	bool DrawDebugLineProjectileTrace = false;
+	bool bDrawDebugLineProjectileTrace = false;
+
+	// TODO SetTurretReference
+
+	UTankBarrel* Barrel;
+	void SetBarrelReference(UTankBarrel* BarrelToSet);
+
+	void MoveBarrelTowards(const FVector &AimDirection);
+	void AimAt(const FVector &AimLocation);
 };
