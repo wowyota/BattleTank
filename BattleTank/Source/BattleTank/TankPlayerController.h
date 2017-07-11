@@ -31,6 +31,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float CrosshairYLocation = 1.0f / 3.0f;
 
+	UPROPERTY(EditAnywhere)
+	float LineTraceDistance = 1000000.0f;
+
 	bool GetLookDirection(FVector &LookDirection) const;
 
 	bool GetLookHitLocation(const FVector &LookDirection, FVector &HitLocation) const;
