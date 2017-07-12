@@ -6,10 +6,7 @@
 #include "Tank.generated.h" // Keep this line at last include
 
 class UTankBarrel;
-<<<<<<< HEAD
 class UAimComponent;
-=======
->>>>>>> origin/master
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -26,11 +23,7 @@ protected:
 
 	UAimComponent* AimComponent;
 
-<<<<<<< HEAD
 	UFUNCTION(BlueprintCallable, Category = Tank)
-=======
-	UFUNCTION(BlueprintCallable, Category = Setup)
->>>>>>> origin/master
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
 
