@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
+#include "TankBarrel.h"
 #include "AimComponent.h"
 
 
@@ -35,8 +36,6 @@ void UAimComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 void UAimComponent::AimAt(const FVector &AimLocation)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s is aimming at location %s  from  %s."), *GetOwner()->GetName(), *AimLocation.ToString(), *Barrel->GetComponentLocation().ToString());
-
 	if (!Barrel)
 		return;
 
@@ -52,18 +51,26 @@ void UAimComponent::AimAt(const FVector &AimLocation)
 		StartLocation,
 		EndLocation,
 		LaunchSpeed,
-		//false,  // Default parameter value
-		//0.0f, // Default parameter value
-		//0.0f, // Default parameter value
+		false,  // Default parameter value
+		0.0f, // Default parameter value
+		0.0f, // Default parameter value
 		ESuggestProjVelocityTraceOption::DoNotTrace, // Default parameter value
-		//FCollisionResponseParams::DefaultResponseParam, // Default parameter value
-		//TArray<AActor*>(), // Default parameter value
-		DrawDebugLineProjectileTrace // Draw debug line
+		FCollisionResponseParams::DefaultResponseParam, // Default parameter value
+		TArray<AActor*>(), // Default parameter value
+		bDrawDebugLineProjectileTrace // Draw debug line
 	);
 
 	if (bHaveAimSolution)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s is aimming at location %s  from  %s."), *GetOwner()->GetName(), *AimLocation.ToString(), *Barrel->GetComponentLocation().ToString());
+		UE_LOG(LogTemp, Warning, TEXT("%f: Solution found."), GetWorld()->GetTimeSeconds());
+		
+		FVector AimDirection = TossVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimDirection);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%f: No solution."), GetWorld()->GetTimeSeconds());
+
 	}
 
 
@@ -74,16 +81,17 @@ void UAimComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 	Barrel = BarrelToSet;
 }
 
+// Calculate the difference between current barrel rotation and AimDirection
+// If the difference is not 0, then Barrel's moving speed is not 0 either.
 void UAimComponent::MoveBarrelTowards(const FVector &AimDirection)
 {
-	// cal difference between current barrel rotation and AimDirection
+	/// Calculate
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
 	FRotator AimAsRotator = AimDirection.Rotation();
 	FRotator DeltaRotator = AimAsRotator - BarrelRotator;
-
-
-
-	// move the barrel the right amount rotation at this frame
+	
+	// Move
+	Barrel->Elevate(DeltaRotator.Pitch);
 
 	// given a max elevation speed and the frame time
 }
