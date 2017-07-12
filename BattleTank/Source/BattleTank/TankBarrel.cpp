@@ -4,6 +4,7 @@
 #include "TankBarrel.h"
 
 
+<<<<<<< HEAD
 void UTankBarrel::Elevate(float RelativeSpeed)
 {
 	FMath::Clamp<float>(RelativeSpeed, -1, +1);
@@ -13,6 +14,11 @@ void UTankBarrel::Elevate(float RelativeSpeed)
 	Angle = FMath::Clamp<float>(Angle, MinElevationDegrees, MaxElevationDegrees);
 
 	SetRelativeRotation(FRotator(Angle, 0.f, 0.f));
+=======
+void UTankBarrel::Elevate(float DegreesPerSecond)
+{
+
+>>>>>>> origin/master
 }
 
 
