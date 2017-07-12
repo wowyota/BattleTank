@@ -2,10 +2,11 @@
 
 #pragma once
 
+#include "TankBarrel.h"
 #include "Components/ActorComponent.h"
 #include "AimComponent.generated.h"
 
-class UTankBarrel;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UAimComponent : public UActorComponent
 {
@@ -33,7 +34,7 @@ public:
 	float LaunchSpeed = 10000.f;
 
 	UPROPERTY(EditAnywhere, Category = Tank)
-	bool bDrawDebugLineProjectileTrace = false;
+	bool DrawDebugLineProjectileTrace = true;
 
 	void MoveBarrelTowards(const FVector &AimDirection);
 

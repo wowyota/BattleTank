@@ -2,11 +2,11 @@
 
 #pragma once
 
+#include "AimComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h" // Keep this line at last include
 
 class UTankBarrel;
-class UAimComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -27,7 +27,9 @@ protected:
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
 
-public:
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

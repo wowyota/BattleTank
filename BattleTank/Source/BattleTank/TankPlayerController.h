@@ -2,10 +2,9 @@
 
 #pragma once
 
+#include "Tank.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
-
-class ATank;
 
 /**
  * 
@@ -27,13 +26,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Tank)
 	bool GetSightRayHitLocation(FVector &HitLocation) const;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
+	UPROPERTY(EditAnywhere)
 	float CrosshairXLocation = 0.5;
 	
-	UPROPERTY(EditAnywhere, Category = Tank)
+	UPROPERTY(EditAnywhere)
 	float CrosshairYLocation = 1.0f / 3.0f;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
+	UPROPERTY(EditAnywhere)
 	float LineTraceDistance = 1000000.0f;
 
 	bool GetLookDirection(FVector &LookDirection) const;
