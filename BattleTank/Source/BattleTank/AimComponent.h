@@ -29,4 +29,11 @@ public:
 
 	void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
 
+	UPROPERTY(EditAnywhere, Category = Tank)
+	float LaunchSpeed = 10000.f;
+
+	UPROPERTY(EditAnywhere, Category = Tank)
+	bool DrawDebugLineProjectileTrace = true;
+
+
 };

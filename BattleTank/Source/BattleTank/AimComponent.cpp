@@ -36,6 +36,34 @@ void UAimComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 void UAimComponent::AimAt(const FVector &AimLocation)
 {
 	UE_LOG(LogTemp, Warning, TEXT("%s is aimming at location %s  from  %s."), *GetOwner()->GetName(), *AimLocation.ToString(), *Barrel->GetComponentLocation().ToString());
+
+	if (!Barrel)
+		return;
+
+	FVector TossVelocity; // Out parameter
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+	FVector EndLocation = AimLocation;
+	float TossSpeed = LaunchSpeed;
+	bool bDrawDebug = true;
+	// For more detail, see https://docs.unrealengine.com/latest/INT/API/Runtime/Engine/Kismet/UGameplayStatics/SuggestProjectileVelocity/index.html and https://docs.unrealengine.com/latest/INT/BlueprintAPI/Game/Components/ProjectileMovement/SuggestProjectileVelocity/index.html
+	UGameplayStatics::SuggestProjectileVelocity(
+		this,
+		TossVelocity,
+		StartLocation,
+		EndLocation,
+		LaunchSpeed,
+		//false,  // Default parameter value
+		//0.0f, // Default parameter value
+		//0.0f, // Default parameter value
+		ESuggestProjVelocityTraceOption::DoNotTrace, // Default parameter value
+		//FCollisionResponseParams::DefaultResponseParam, // Default parameter value
+		//TArray<AActor*>(), // Default parameter value
+		DrawDebugLineProjectileTrace // Draw debug line
+	);
+
+	UE_LOG(LogTemp, Warning, TEXT("%s is aimming at location %s  from  %s."), *GetOwner()->GetName(), *AimLocation.ToString(), *Barrel->GetComponentLocation().ToString());
+
+
 }
 
 void UAimComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)

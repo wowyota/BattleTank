@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h" // Keep this line at last include
 
+
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
@@ -21,7 +22,7 @@ protected:
 
 	UAimComponent* AimComponent;
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = Tank)
 	void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
 
 
