@@ -46,7 +46,7 @@ void UAimComponent::AimAt(const FVector &AimLocation)
 	float TossSpeed = LaunchSpeed;
 	bool bDrawDebug = true;
 	// For more detail, see https://docs.unrealengine.com/latest/INT/API/Runtime/Engine/Kismet/UGameplayStatics/SuggestProjectileVelocity/index.html and https://docs.unrealengine.com/latest/INT/BlueprintAPI/Game/Components/ProjectileMovement/SuggestProjectileVelocity/index.html
-	UGameplayStatics::SuggestProjectileVelocity(
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this,
 		TossVelocity,
 		StartLocation,
@@ -61,12 +61,30 @@ void UAimComponent::AimAt(const FVector &AimLocation)
 		DrawDebugLineProjectileTrace // Draw debug line
 	);
 
-	UE_LOG(LogTemp, Warning, TEXT("%s is aimming at location %s  from  %s."), *GetOwner()->GetName(), *AimLocation.ToString(), *Barrel->GetComponentLocation().ToString());
+	if (bHaveAimSolution)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s is aimming at location %s  from  %s."), *GetOwner()->GetName(), *AimLocation.ToString(), *Barrel->GetComponentLocation().ToString());
+	}
 
 
 }
 
-void UAimComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
+void UAimComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
+
+void UAimComponent::MoveBarrelTowards(const FVector &AimDirection)
+{
+	// cal difference between current barrel rotation and AimDirection
+	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
+	FRotator AimAsRotator = AimDirection.Rotation();
+	FRotator DeltaRotator = AimAsRotator - BarrelRotator;
+
+
+
+	// move the barrel the right amount rotation at this frame
+
+	// given a max elevation speed and the frame time
+}
+

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "TankBarrel.h"
 #include "Components/ActorComponent.h"
 #include "AimComponent.generated.h"
 
@@ -25,15 +26,17 @@ public:
 		
 	void AimAt(const FVector &AimLocation);
 
-	UStaticMeshComponent* Barrel;
+	UTankBarrel* Barrel;
 
-	void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
+	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
 	UPROPERTY(EditAnywhere, Category = Tank)
 	float LaunchSpeed = 10000.f;
 
 	UPROPERTY(EditAnywhere, Category = Tank)
 	bool DrawDebugLineProjectileTrace = true;
+
+	void MoveBarrelTowards(const FVector &AimDirection);
 
 
 };
