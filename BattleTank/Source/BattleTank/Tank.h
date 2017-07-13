@@ -7,6 +7,8 @@
 
 class UTankBarrel;
 class UAimComponent;
+class AProjectile;
+
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -21,10 +23,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UAimComponent* AimComponent;
+	UAimComponent* AimComponent; 
+
+	UPROPERTY(EditAnywhere, Category = Tank)
+	TSubclassOf<AProjectile> Projectile;
+
+	UTankBarrel* Barrel;
 
 	UFUNCTION(BlueprintCallable, Category = Tank)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
+
+	UFUNCTION(BlueprintCallable, Category = Tank)
+	void SetTurretReference(UTankTurret* TurretToSet);
+
+	UFUNCTION(BlueprintCallable, Category = Tank)
+	void Fire();
+
+
 
 
 public:
