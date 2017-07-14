@@ -45,8 +45,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = Tank)
 	bool bDrawDebugLineProjectileTrace = false;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
-	bool bAIOpenTick = false;
+	UPROPERTY(EditDefaultsOnly, Category = Tank)
+	bool bAIOpenTick = true;
 
 	UFUNCTION(BlueprintCallable, Category = Tank)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);

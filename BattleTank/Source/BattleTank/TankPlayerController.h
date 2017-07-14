@@ -27,10 +27,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Tank)
 	bool GetSightRayHitLocation(FVector &HitLocation) const;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
+	UPROPERTY(EditDefaultsOnly, Category = Tank)
 	float CrosshairXLocation = 0.5;
 	
-	UPROPERTY(EditAnywhere, Category = Tank)
+	UPROPERTY(EditDefaultsOnly, Category = Tank)
 	float CrosshairYLocation = 1.0f / 3.0f;
 
 	UPROPERTY(EditAnywhere, Category = Tank)
