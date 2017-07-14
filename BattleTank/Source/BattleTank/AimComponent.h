@@ -2,9 +2,11 @@
 
 #pragma once
 
-#include "TankBarrel.h"
 #include "Components/ActorComponent.h"
 #include "AimComponent.generated.h"
+
+class UTankBarrel;
+class UTankTurret;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UAimComponent : public UActorComponent
@@ -22,18 +24,27 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-		
-	UPROPERTY(EditAnywhere, Category = Firing)
+
+	UPROPERTY(EditAnywhere, Category = Tank)
 	float LaunchSpeed = 10000.f;
 
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditAnywhere, Category = Tank)
 	bool bDrawDebugLineProjectileTrace = false;
 
-	// TODO SetTurretReference
 
+
+	void AimAt(const FVector &AimLocation);
+
+
+	/// about Barrel
 	UTankBarrel* Barrel;
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
 	void MoveBarrelTowards(const FVector &AimDirection);
-	void AimAt(const FVector &AimLocation);
+
+	/// about Turret
+	UTankTurret* Turret;
+	void SetTurretReference(UTankTurret* TurretToSet);
+	void MoveTurretTowards(const FVector &AimDirection);
+
+
 };

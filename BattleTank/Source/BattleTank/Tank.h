@@ -2,11 +2,13 @@
 
 #pragma once
 
-#include "AimComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h" // Keep this line at last include
 
 class UTankBarrel;
+class UAimComponent;
+class AProjectile;
+
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -21,15 +23,26 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UAimComponent* AimComponent;
+	UAimComponent* AimComponent; 
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UPROPERTY(EditAnywhere, Category = Tank)
+	TSubclassOf<AProjectile> Projectile;
+
+	UTankBarrel* Barrel;
+
+	UFUNCTION(BlueprintCallable, Category = Tank)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
+	UFUNCTION(BlueprintCallable, Category = Tank)
+	void SetTurretReference(UTankTurret* TurretToSet);
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UFUNCTION(BlueprintCallable, Category = Tank)
+	void Fire();
+
+
+
+
+public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

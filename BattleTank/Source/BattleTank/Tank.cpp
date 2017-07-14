@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
+#include "Projectile.h"
+#include "TankBarrel.h"
+#include "AimComponent.h"
 #include "Tank.h"
 
 
@@ -8,7 +11,7 @@
 ATank::ATank()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	AimComponent = CreateDefaultSubobject<UAimComponent>(FName("AimComponent"));
 
@@ -21,12 +24,6 @@ void ATank::BeginPlay()
 	
 }
 
-// Called every frame
-void ATank::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -42,5 +39,23 @@ void ATank::AimAt(const FVector &AimLocation)
 
 void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
+	Barrel = BarrelToSet;
 	AimComponent->SetBarrelReference(BarrelToSet);
+}
+
+void ATank::SetTurretReference(UTankTurret* TurretToSet)
+{
+	AimComponent->SetTurretReference(TurretToSet);
+}
+
+void ATank::Fire()
+{
+	GetWorld()->SpawnActor<AProjectile>	(
+		Projectile, 
+		Barrel->GetSocketLocation(FName("Projectile")),
+		FRotator::ZeroRotator
+		);
+
+	UE_LOG(LogTemp, Warning, TEXT("%f: Fire."), GetWorld()->GetTimeSeconds());
+
 }
