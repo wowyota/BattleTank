@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
+#include "Tank.h"
 #include "TankTurret.h"
 #include "TankBarrel.h"
 #include "AimComponent.h"
@@ -22,6 +23,7 @@ void UAimComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Tank = Cast<ATank>(GetOwner());
 	// ...
 	
 }
@@ -37,13 +39,13 @@ void UAimComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 void UAimComponent::AimAt(const FVector &AimLocation)
 {
-	if (!Barrel || !Turret)
+	if (!Tank || !Barrel || !Turret)
 		return;
 
-	FVector TossVelocity; // Out parameter
+	FVector TossVelocity; // Out parameter, its VectorLength is gonna to be LaunchSpeed.
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	FVector EndLocation = AimLocation;
-	float TossSpeed = LaunchSpeed;
+	float TossSpeed = Tank->LaunchSpeed;
 	bool bDrawDebug = true;
 
 	// For more detail, see https://docs.unrealengine.com/latest/INT/API/Runtime/Engine/Kismet/UGameplayStatics/SuggestProjectileVelocity/index.html and https://docs.unrealengine.com/latest/INT/BlueprintAPI/Game/Components/ProjectileMovement/SuggestProjectileVelocity/index.html
@@ -52,15 +54,19 @@ void UAimComponent::AimAt(const FVector &AimLocation)
 		TossVelocity,
 		StartLocation,
 		EndLocation,
-		LaunchSpeed,
+		Tank->LaunchSpeed,
 		false,  // Default parameter value
 		0.0f, // Default parameter value
 		0.0f, // Default parameter value
 		ESuggestProjVelocityTraceOption::DoNotTrace, // Default parameter value
 		FCollisionResponseParams::DefaultResponseParam, // Default parameter value
 		TArray<AActor*>(), // Default parameter value
-		bDrawDebugLineProjectileTrace // Draw debug line
+		Tank->bDrawDebugLineProjectileTrace // Draw debug line
 	);
+
+	FVector AimDirection = TossVelocity.GetSafeNormal();
+	MoveBarrelTowards(AimDirection);
+	MoveTurretTowards(AimDirection);
 
 	if (bHaveAimSolution)
 	{
@@ -68,13 +74,15 @@ void UAimComponent::AimAt(const FVector &AimLocation)
 		FVector AimDirection = TossVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 		MoveTurretTowards(AimDirection);
+		//UE_LOG(LogTemp, Warning, TEXT("%f: Solution found."), GetWorld()->GetTimeSeconds());
 	}
 	else
 	{
+		// The code couldn't run into this else branch.
 		UE_LOG(LogTemp, Warning, TEXT("%f: No solution."), GetWorld()->GetTimeSeconds());
 	}
 
-
+	UE_LOG(LogTemp, Warning, TEXT("hi."));
 }
 
 

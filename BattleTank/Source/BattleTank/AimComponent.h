@@ -7,8 +7,9 @@
 
 class UTankBarrel;
 class UTankTurret;
+class ATank;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BATTLETANK_API UAimComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -25,13 +26,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
-	float LaunchSpeed = 10000.f;
-
-	UPROPERTY(EditAnywhere, Category = Tank)
-	bool bDrawDebugLineProjectileTrace = false;
-
-
+	ATank* Tank;
 
 	void AimAt(const FVector &AimLocation);
 

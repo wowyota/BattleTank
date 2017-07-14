@@ -22,10 +22,6 @@ public:
 	// Controller ticks because it needs to find the player location
 	virtual void Tick(float DeltaTime) override;
 
-	ATank* GetControlledTank() const;
-
-	ATank* GetPlayerTank() const;
-
-	UPROPERTY(EditAnywhere, Category = Tank)
-	bool bAIOpenTick = false;
-};
+	ATank* ControlledTank;
+	ATank* PlayerTank;
+	};
