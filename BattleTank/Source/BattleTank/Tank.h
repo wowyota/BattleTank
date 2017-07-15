@@ -22,6 +22,7 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(BlueprintReadOnly,Category = "Tank")
 	UAimComponent* AimComponent; 
 
 	UTankBarrel* Barrel;
