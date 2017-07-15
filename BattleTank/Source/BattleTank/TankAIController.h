@@ -24,4 +24,6 @@ public:
 
 	ATank* ControlledTank;
 	ATank* PlayerTank;
+
+	
 	};
