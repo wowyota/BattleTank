@@ -40,6 +40,8 @@ public:
 
 	double LastFireTime = 0;
 
+	UPROPERTY(EditAnywhere, Category = "Tank")
+	float MaxForce = 40000000.f;
 
 
 	UPROPERTY(EditAnywhere, Category = Tank)

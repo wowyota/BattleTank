@@ -82,7 +82,6 @@ void UAimComponent::AimAt(const FVector &AimLocation)
 		UE_LOG(LogTemp, Warning, TEXT("%f: No solution."), GetWorld()->GetTimeSeconds());
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("hi."));
 }
 
 
