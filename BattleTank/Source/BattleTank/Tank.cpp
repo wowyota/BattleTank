@@ -17,6 +17,5 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	AimComponent = FindComponentByClass<UAimComponent>();
 }
 

@@ -3,11 +3,10 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
-
 #include "Projectile.h"
 #include "TankBarrel.h"
-
 #include "AimComponent.generated.h"
+
 
 UENUM()
 enum class EFiringState :uint8
@@ -17,9 +16,11 @@ enum class EFiringState :uint8
 	Locked
 };
 
+
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BATTLETANK_API UAimComponent : public UActorComponent
@@ -39,24 +40,24 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 
-	void AimAt(const FVector &AimLocation);
 
 
-	/// about Barrel
+
 	UTankBarrel* Barrel;
 	void MoveBarrelTowards(const FVector &AimDirection);
 
-	/// about Turret
 	UTankTurret* Turret;
 	void MoveTurretTowards(const FVector &AimDirection);
-
-	UPROPERTY(BlueprintReadOnly, Category = "Tank")
-	EFiringState FiringState = EFiringState::Aiming;
 
 
 	UFUNCTION(BlueprintCallable, Category = "Tank")
 	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
+
+
+
+
+	void AimAt(const FVector &AimLocation);
 
 	UPROPERTY(EditAnywhere, Category = Tank)
 	float LaunchSpeed = 10000.f;
@@ -70,23 +71,18 @@ public:
 
 	// Treat this like a class 
 	UPROPERTY(EditAnywhere, Category = Tank)
-		TSubclassOf<AProjectile> ProjectileBlueprint;
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	UPROPERTY(EditAnywhere, Category = Tank)
-		float ReloadTime = 3.f;
+	float ReloadTime = 3.f;
 	UPROPERTY(EditAnywhere, Category = Tank)
-		float bCanFire = true;
+	float bCanFire = true;
 
 	double LastFireTime = 0;
 
-	UPROPERTY(EditAnywhere, Category = "Tank")
-		float MaxForce = 40000000.f;
-
-
-
-
-
 	UFUNCTION(BlueprintCallable, Category = Tank)
-		void Fire();
+	void Fire();
 
+	UPROPERTY(BlueprintReadOnly, Category = "Tank")
+	EFiringState FiringState = EFiringState::Aiming;
 };

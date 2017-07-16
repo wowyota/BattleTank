@@ -5,7 +5,6 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-class ATank;
 class UAimComponent;
 /**
  * 
@@ -16,8 +15,6 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable,Category = "Tank")
-	ATank* GetControlledTank() const;
 	
 	virtual void BeginPlay() override;
 
@@ -40,6 +37,8 @@ public:
 	bool GetLookDirection(FVector &LookDirection) const;
 
 	bool GetLookHitLocation(const FVector &LookDirection, FVector &HitLocation) const;
+
+	UAimComponent* AimComponent;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Tank")
 	void FoundAimComponent(UAimComponent* AimComponent);
