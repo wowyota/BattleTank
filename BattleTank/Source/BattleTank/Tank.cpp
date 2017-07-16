@@ -2,8 +2,6 @@
 
 #include "BattleTank.h"
 #include "Tank.h"
-#include "Projectile.h"
-#include "TankBarrel.h"
 #include "AimComponent.h"
 
 
@@ -22,22 +20,3 @@ void ATank::BeginPlay()
 	AimComponent = FindComponentByClass<UAimComponent>();
 }
 
-
-void ATank::Fire()
-{
-	if (!Barrel || !AimComponent) return;
-
-	double NowTime = FPlatformTime::Seconds();
-	bCanFire = (NowTime - LastFireTime) > ReloadTime;
-	if (!bCanFire) return;
-
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>	(
-		ProjectileBlueprint,
-		Barrel->GetSocketLocation(FName("Projectile")),
-		Barrel->GetSocketRotation(FName("Projectile"))
-		);
-
-	Projectile->LaunchProjectile(LaunchSpeed);
-
-	LastFireTime = NowTime;
-}

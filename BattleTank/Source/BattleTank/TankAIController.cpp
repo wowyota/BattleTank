@@ -39,7 +39,7 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!PlayerTank || !ControlledTank || !ControlledTank->bAIOpenTick) return;
+	if (!PlayerTank || !ControlledTank || !bAIOpenTick) return;
 
 	float AcceptanceRadius = 30.f;
 	
@@ -52,6 +52,6 @@ void ATankAIController::Tick(float DeltaTime)
 	AimComponent->AimAt(PlayerTank->GetActorLocation());
 
 	// Fire
-	//ControlledTank->Fire();
+	AimComponent->Fire();
 
 }

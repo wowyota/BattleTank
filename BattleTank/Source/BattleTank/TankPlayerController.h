@@ -43,4 +43,6 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Tank")
 	void FoundAimComponent(UAimComponent* AimComponent);
+
+
 };

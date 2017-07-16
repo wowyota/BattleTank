@@ -14,8 +14,7 @@ void UTankTrack::SetThrottle(float Throttle)
 {
 	if (!Tank || !TankRootComponent) return;
 
-	if (Tank->GetVelocity().Size()>MaxSpeed) return;
-	auto ForceApplied = GetForwardVector() * Throttle * Tank->MaxForce;
+	auto ForceApplied = GetForwardVector() * Throttle * MaxForce;
 	auto ForceLocation = GetComponentLocation();
 	TankRootComponent->AddForceAtLocation(ForceApplied, ForceLocation);
 

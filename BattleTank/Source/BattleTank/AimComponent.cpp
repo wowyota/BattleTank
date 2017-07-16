@@ -115,3 +115,22 @@ void UAimComponent::Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSe
 	Turret = TurretToSet;
 }
 
+
+void UAimComponent::Fire()
+{
+	if (!Barrel) return;
+
+	double NowTime = FPlatformTime::Seconds();
+	bCanFire = (NowTime - LastFireTime) > ReloadTime;
+	if (!bCanFire) return;
+
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+		ProjectileBlueprint,
+		Barrel->GetSocketLocation(FName("Projectile")),
+		Barrel->GetSocketRotation(FName("Projectile"))
+		);
+
+	Projectile->LaunchProjectile(LaunchSpeed);
+
+	LastFireTime = NowTime;
+}

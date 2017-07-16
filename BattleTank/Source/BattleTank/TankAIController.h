@@ -25,5 +25,6 @@ public:
 	ATank* ControlledTank;
 	ATank* PlayerTank;
 
-	
-	};
+	UPROPERTY(EditDefaultsOnly, Category = Tank)
+	bool bAIOpenTick = true;
+};

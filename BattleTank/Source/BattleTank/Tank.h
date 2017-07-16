@@ -27,33 +27,7 @@ public:
 
 	UTankBarrel* Barrel;
 
-	// Treat this like a class 
-	UPROPERTY(EditAnywhere, Category = Tank)
-	TSubclassOf<AProjectile> ProjectileBlueprint;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
-	float LaunchSpeed = 10000.f;
-
-	UPROPERTY(EditAnywhere, Category = Tank)
-	float ReloadTime = 3.f;
-	UPROPERTY(EditAnywhere, Category = Tank)
-	float bCanFire = true;
-
-	double LastFireTime = 0;
-
-	UPROPERTY(EditAnywhere, Category = "Tank")
-	float MaxForce = 40000000.f;
-
-
-	UPROPERTY(EditAnywhere, Category = Tank)
-	bool bDrawDebugLineProjectileTrace = false;
-
-	UPROPERTY(EditDefaultsOnly, Category = Tank)
-	bool bAIOpenTick = true;
-	
-	UFUNCTION(BlueprintCallable, Category = Tank)
-	void Fire();
-	
 
 
 
