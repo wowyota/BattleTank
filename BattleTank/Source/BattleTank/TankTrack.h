@@ -21,7 +21,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Tank")
 	void SetThrottle(float Throttle);
 	
-	ATank* Tank;
 	UPrimitiveComponent* TankRootComponent;
 
 	// Max accelatation

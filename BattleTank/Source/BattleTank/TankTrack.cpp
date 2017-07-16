@@ -6,18 +6,19 @@
 
 void UTankTrack::BeginPlay()
 {
-	Tank = Cast<ATank>(GetOwner());
 	TankRootComponent = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 }
 
 void UTankTrack::SetThrottle(float Throttle)
 {
-	if (!Tank || !TankRootComponent) return;
+	// Keep it here! or Crash! I think it's because SetThrottle gets call before 'this' construction(we I say 'this', it means "this object TankTrack")
+	if (!this) return;
+
+	if (!TankRootComponent) return;
 
 	auto ForceApplied = GetForwardVector() * Throttle * MaxForce;
 	auto ForceLocation = GetComponentLocation();
 	TankRootComponent->AddForceAtLocation(ForceApplied, ForceLocation);
 
-	
 }
 

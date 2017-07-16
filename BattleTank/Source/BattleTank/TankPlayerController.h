@@ -20,6 +20,8 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+
+
 	void AimTowardsCrosshair();
 
 	UFUNCTION(BlueprintCallable, Category = Tank)
@@ -37,6 +39,8 @@ public:
 	bool GetLookDirection(FVector &LookDirection) const;
 
 	bool GetLookHitLocation(const FVector &LookDirection, FVector &HitLocation) const;
+
+
 
 	UAimComponent* AimComponent;
 
