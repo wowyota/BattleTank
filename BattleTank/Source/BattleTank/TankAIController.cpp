@@ -2,6 +2,7 @@
 
 #include "BattleTank.h"
 #include "Tank.h"
+#include "AimComponent.h"
 #include "TankAIController.h"
 
 
@@ -41,15 +42,16 @@ void ATankAIController::Tick(float DeltaTime)
 	if (!PlayerTank || !ControlledTank || !ControlledTank->bAIOpenTick) return;
 
 	float AcceptanceRadius = 30.f;
-	// Move towards player
 	
+	// Move towards player
 	MoveToActor(PlayerTank, AcceptanceRadius);
 
 
 	// Aim at player
-	ControlledTank->AimAt(PlayerTank->GetActorLocation());
+	UAimComponent* AimComponent = GetPawn()->FindComponentByClass<UAimComponent>();
+	AimComponent->AimAt(PlayerTank->GetActorLocation());
 
 	// Fire
-	ControlledTank->Fire();
+	//ControlledTank->Fire();
 
 }

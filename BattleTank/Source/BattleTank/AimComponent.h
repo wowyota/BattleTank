@@ -15,7 +15,6 @@ enum class EFiringState :uint8
 
 class UTankBarrel;
 class UTankTurret;
-class ATank;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BATTLETANK_API UAimComponent : public UActorComponent
@@ -34,21 +33,29 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	ATank* Tank;
 
 	void AimAt(const FVector &AimLocation);
 
 
 	/// about Barrel
 	UTankBarrel* Barrel;
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
 	void MoveBarrelTowards(const FVector &AimDirection);
 
 	/// about Turret
 	UTankTurret* Turret;
-	void SetTurretReference(UTankTurret* TurretToSet);
 	void MoveTurretTowards(const FVector &AimDirection);
 
 	UPROPERTY(BlueprintReadOnly, Category = "Tank")
 	EFiringState FiringState = EFiringState::Aiming;
+
+
+	UFUNCTION(BlueprintCallable, Category = "Tank")
+	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
+
+
+	UPROPERTY(EditAnywhere, Category = Tank)
+	float LaunchSpeed = 10000.f;
+
+	UPROPERTY(EditAnywhere, Category = Tank)
+	bool bDrawDebugLineProjectileTrace = false;
 };

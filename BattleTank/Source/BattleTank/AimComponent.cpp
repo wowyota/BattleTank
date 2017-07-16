@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
-#include "Tank.h"
 #include "TankTurret.h"
 #include "TankBarrel.h"
 #include "AimComponent.h"
@@ -23,7 +22,6 @@ void UAimComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Tank = Cast<ATank>(GetOwner());
 	// ...
 	
 }
@@ -39,14 +37,13 @@ void UAimComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 void UAimComponent::AimAt(const FVector &AimLocation)
 {
-	if (!Tank || !Barrel || !Turret)
+	if (!Barrel || !Turret)
 		return;
 
 	FVector TossVelocity; // Out parameter, its VectorLength is gonna to be LaunchSpeed.
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	FVector EndLocation = AimLocation;
-	float TossSpeed = Tank->LaunchSpeed;
-	bool bDrawDebug = true;
+	float TossSpeed = LaunchSpeed;
 
 	// For more detail, see https://docs.unrealengine.com/latest/INT/API/Runtime/Engine/Kismet/UGameplayStatics/SuggestProjectileVelocity/index.html and https://docs.unrealengine.com/latest/INT/BlueprintAPI/Game/Components/ProjectileMovement/SuggestProjectileVelocity/index.html
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
@@ -54,14 +51,14 @@ void UAimComponent::AimAt(const FVector &AimLocation)
 		TossVelocity,
 		StartLocation,
 		EndLocation,
-		Tank->LaunchSpeed,
+		LaunchSpeed,
 		false,  // Default parameter value
 		0.0f, // Default parameter value
 		0.0f, // Default parameter value
 		ESuggestProjVelocityTraceOption::DoNotTrace, // Default parameter value
 		FCollisionResponseParams::DefaultResponseParam, // Default parameter value
 		TArray<AActor*>(), // Default parameter value
-		Tank->bDrawDebugLineProjectileTrace // Draw debug line
+		bDrawDebugLineProjectileTrace // Draw debug line
 	);
 
 	FVector AimDirection = TossVelocity.GetSafeNormal();
@@ -85,11 +82,6 @@ void UAimComponent::AimAt(const FVector &AimLocation)
 }
 
 
-void UAimComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
-{
-	Barrel = BarrelToSet;
-}
-
 // Calculate the difference between current barrel rotation and AimDirection
 // If the difference is not 0, then Barrel's moving speed is not 0 either.
 void UAimComponent::MoveBarrelTowards(const FVector &AimDirection)
@@ -104,11 +96,6 @@ void UAimComponent::MoveBarrelTowards(const FVector &AimDirection)
 }
 
 
-void UAimComponent::SetTurretReference(UTankTurret* TurretToSet)
-{
-	Turret = TurretToSet;
-}
-
 // Calculate the difference between current Turret rotation and AimDirection
 // If the difference is not 0, then Turret's moving speed is not 0 either.
 void UAimComponent::MoveTurretTowards(const FVector &AimDirection)
@@ -120,5 +107,11 @@ void UAimComponent::MoveTurretTowards(const FVector &AimDirection)
 
 	// Move
 	Turret->Rotate(DeltaRotator.Yaw);
+}
+
+void UAimComponent::Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
+{
+	Barrel = BarrelToSet;
+	Turret = TurretToSet;
 }
 

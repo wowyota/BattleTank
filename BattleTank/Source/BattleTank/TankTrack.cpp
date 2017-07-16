@@ -13,7 +13,6 @@ void UTankTrack::BeginPlay()
 void UTankTrack::SetThrottle(float Throttle)
 {
 	if (!Tank || !TankRootComponent) return;
-	UE_LOG(LogTemp, Warning, TEXT("%f: %s: %f"),GetWorld()->TimeSeconds,*GetName(),Throttle);
 
 	if (Tank->GetVelocity().Size()>MaxSpeed) return;
 	auto ForceApplied = GetForwardVector() * Throttle * Tank->MaxForce;

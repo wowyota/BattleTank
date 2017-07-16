@@ -50,20 +50,11 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = Tank)
 	bool bAIOpenTick = true;
-
-	UFUNCTION(BlueprintCallable, Category = Tank)
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
-	UFUNCTION(BlueprintCallable, Category = Tank)
-	void SetTurretReference(UTankTurret* TurretToSet);
-
+	
 	UFUNCTION(BlueprintCallable, Category = Tank)
 	void Fire();
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	void AimAt(const FVector &AimLocation);
+
 
 
 };
