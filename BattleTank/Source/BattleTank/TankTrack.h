@@ -16,11 +16,14 @@ class BATTLETANK_API UTankTrack : public UStaticMeshComponent
 	GENERATED_BODY()
 
 public:
-	void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Tank")
 	void SetThrottle(float Throttle);
-	
+
+	float CurrentThrottle = 0;;
+	void DriveTrack();
+
+
 	UPrimitiveComponent* TankRootComponent;
 
 	// Max accelatation
@@ -30,4 +33,16 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Tank")
 	float MaxSpeed = 10000.f; 
 
+private:
+	UTankTrack();
+
+	// If you override BeginPlay, if may stop tick woring.
+	virtual void BeginPlay() override;
+
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	void AntiSlippage();
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& HitResult);
 };

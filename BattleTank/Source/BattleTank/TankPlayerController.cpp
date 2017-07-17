@@ -26,6 +26,9 @@ void ATankPlayerController::AimTowardsCrosshair()
 {
 	if (!AimComponent) return;
 
+	// If player or AI die
+	if (!GetPawn()) return;
+
 	FVector HitLocation;
 
 	if (GetSightRayHitLocation(HitLocation))

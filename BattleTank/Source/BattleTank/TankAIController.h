@@ -25,10 +25,10 @@ public:
 	APawn* PlayerTank;
 	UAimComponent* AimComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = Tank)
+	UPROPERTY(EditDefaultsOnly, Category = "Tank")
 	bool bAIOpenTick = true;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
+	UPROPERTY(EditAnywhere, Category = "Tank")
 	float AcceptanceRadius = 30.f;
 
 };

@@ -13,7 +13,8 @@ enum class EFiringState :uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	OutOfAmmo
 };
 
 
@@ -59,30 +60,46 @@ public:
 
 	void AimAt(const FVector &AimLocation);
 
-	UPROPERTY(EditAnywhere, Category = Tank)
+	FVector AimDirection;
+
+	// the length of vector of projectile launch velocity
+	UPROPERTY(EditAnywhere, Category = "Tank")
 	float LaunchSpeed = 10000.f;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
+	// if draw debug line when launch projectile
+	UPROPERTY(EditAnywhere, Category = "Tank")
 	bool bDrawDebugLineProjectileTrace = false;
 
 
 
-
-
-	// Treat this like a class 
-	UPROPERTY(EditAnywhere, Category = Tank)
+	// Like a pointer, it points to what kind of projectile you want. Assign it in blueprint.
+	UPROPERTY(EditAnywhere, Category = "Tank")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
+	// Time between two fire
+	UPROPERTY(EditAnywhere, Category = "Tank")
 	float ReloadTime = 3.f;
-	UPROPERTY(EditAnywhere, Category = Tank)
+	UPROPERTY(EditAnywhere, Category = "Tank")
 	float bCanFire = true;
 
 	double LastFireTime = 0;
 
-	UFUNCTION(BlueprintCallable, Category = Tank)
+	UFUNCTION(BlueprintCallable, Category = "Tank")
 	void Fire();
 
-	UPROPERTY(BlueprintReadOnly, Category = "Tank")
+
+
+
+	UPROPERTY(EditAnywhere, Category = "Tank")
 	EFiringState FiringState = EFiringState::Aiming;
+
+	EFiringState GetFiringState() const;
+
+	bool IsBarrelMoving();
+
+	UPROPERTY(EditAnywhere, Category = "Tank")
+	int TotalAmmo = 10;
+
+	UPROPERTY(EditAnywhere, Category = "Tank")
+	int NowAmmo = TotalAmmo;
 };

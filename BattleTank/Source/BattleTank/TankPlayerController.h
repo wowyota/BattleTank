@@ -44,6 +44,7 @@ public:
 
 	UAimComponent* AimComponent;
 
+	// If we found AimComponent, then we will set UI (of course in blueprint) 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Tank")
 	void FoundAimComponent(UAimComponent* AimComponent);
 
