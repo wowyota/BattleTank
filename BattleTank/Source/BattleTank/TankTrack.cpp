@@ -33,8 +33,6 @@ void UTankTrack::AntiSlippage()
 	// Because we have two track
 	FVector AntiSlippageAcceletation = (-SlippageSpeed / GetWorld()->GetDeltaSeconds()) * GetRightVector() / 2;
 
-	auto TankRootComponent = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-
 	FVector AntiSlippageForce = TankRootComponent->GetMass() * AntiSlippageAcceletation;
 
 	TankRootComponent->AddForce(AntiSlippageForce);

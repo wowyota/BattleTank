@@ -19,3 +19,16 @@ void ATank::BeginPlay()
 	Super::BeginPlay();
 }
 
+float ATank::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	int32 DamageToApply = FPlatformMath::RoundToInt(FMath::Clamp<float>(Damage, 0.f, CurrentHealth));
+
+	CurrentHealth -= DamageToApply;
+
+	return DamageToApply;
+}
+
+float ATank::GetHealthPercent() const
+{
+	return (float)CurrentHealth / (float)StartHealth;
+}

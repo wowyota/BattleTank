@@ -18,4 +18,15 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Called by engine when actor damage is dealt
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	UPROPERTY(EditAnywhere,Category = "Tank")
+	int32 StartHealth = 100.f;
+
+	UPROPERTY(EditAnywhere, Category = "Tank")
+	int32 CurrentHealth = 100.f;
+
+	UFUNCTION(BlueprintPure, Category = "Tank")
+	float GetHealthPercent() const;
 };
