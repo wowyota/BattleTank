@@ -3,7 +3,7 @@
 #include "BattleTank.h"
 #include "AimComponent.h"
 #include "TankAIController.h"
-
+#include "Tank.h" // used in Delegate ATank.onDeath
 
 void ATankAIController::BeginPlay()
 {
@@ -37,5 +37,26 @@ void ATankAIController::Tick(float DeltaTime)
 	// Fire
 	if(AimComponent->GetFiringState() == EFiringState::Locked)
 		AimComponent->Fire();
+
+}
+
+void ATankAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!PossessedTank)return;
+
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnPossedTankDeath);
+	}
+
+}
+
+void ATankAIController::OnPossedTankDeath()
+{
+	if (!ControlledTank) return;
+	ControlledTank->DetachFromControllerPendingDestroy();
+	UE_LOG(LogTemp, Warning, TEXT("%s die."), *GetName());
 
 }

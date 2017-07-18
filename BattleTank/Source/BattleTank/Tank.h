@@ -6,6 +6,8 @@
 #include "Tank.generated.h" // Keep this line at last include
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
+
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
@@ -25,8 +27,10 @@ public:
 	int32 StartHealth = 100.f;
 
 	UPROPERTY(EditAnywhere, Category = "Tank")
-	int32 CurrentHealth = 100.f;
+	int32 CurrentHealth; // Initialized in BeignPlay
 
 	UFUNCTION(BlueprintPure, Category = "Tank")
 	float GetHealthPercent() const;
+
+	FTankDelegate OnDeath;
 };

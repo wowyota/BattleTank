@@ -48,20 +48,31 @@ void UTankTrack::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, 
 
 void UTankTrack::SetThrottle(float Throttle)
 {
-	// Keep it here! or Crash! I think it's because SetThrottle gets call before 'this' construction(we I say 'this', it means "this object TankTrack")
 
 
 	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1, 1);
 
+	//UE_LOG(LogTemp, Warning, TEXT("CurrentThrottle: %f"), CurrentThrottle);
 
 }
 
 void UTankTrack::DriveTrack()
 {
-	if (!this) return;
-	if (!TankRootComponent) return;
+	if (!this)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("this"));
+		return;
+	}
+
+	if (!TankRootComponent)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TankRootComponent"));
+		return;
+	}
 	auto ForceApplied = GetForwardVector() * CurrentThrottle * MaxForce;
 	auto ForceLocation = GetComponentLocation();
 	TankRootComponent->AddForceAtLocation(ForceApplied, ForceLocation);
+
+
 }
 

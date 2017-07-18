@@ -3,7 +3,7 @@
 #include "BattleTank.h"
 #include "AimComponent.h"
 #include "TankPlayerController.h"
-
+#include "Tank.h" // used in Delegate ATank.onDeath
 
 void ATankPlayerController::BeginPlay()
 {
@@ -82,8 +82,29 @@ bool ATankPlayerController::GetLookHitLocation(const FVector &LookDirection, FVe
 		HitResult,
 		Start,
 		End,
-		ECollisionChannel::ECC_Visibility
+		ECollisionChannel::ECC_Camera
 	);
 	HitLocation = HitResult.Location;
 	return IsHitAnything;
+}
+
+void ATankPlayerController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!PossessedTank)return;
+
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossedTankDeath);
+	}
+
+}
+
+void ATankPlayerController::OnPossedTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s die."), *GetName());
+
+	// Player cannot control tank anymore
+	StartSpectatingOnly();
 }

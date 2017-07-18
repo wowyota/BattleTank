@@ -31,4 +31,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Tank")
 	float AcceptanceRadius = 30.f;
 
+	// It's called when the Pawn gets possessed.
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnPossedTankDeath();
+
+
 };

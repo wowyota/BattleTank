@@ -49,4 +49,9 @@ public:
 	void FoundAimComponent(UAimComponent* AimComponent);
 
 
+	// It's called when the Pawn gets possessed.
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnPossedTankDeath();
 };
