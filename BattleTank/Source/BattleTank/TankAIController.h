@@ -5,8 +5,7 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-class ATank;
-
+class UAimComponent;
 /**
  * 
  */
@@ -22,10 +21,14 @@ public:
 	// Controller ticks because it needs to find the player location
 	virtual void Tick(float DeltaTime) override;
 
-	ATank* GetControlledTank() const;
+	APawn* ControlledTank;
+	APawn* PlayerTank;
+	UAimComponent* AimComponent;
 
-	ATank* GetPlayerTank() const;
+	UPROPERTY(EditDefaultsOnly, Category = "Tank")
+	bool bAIOpenTick = true;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
-	bool bAIOpenTick = false;
+	UPROPERTY(EditAnywhere, Category = "Tank")
+	float AcceptanceRadius = 30.f;
+
 };

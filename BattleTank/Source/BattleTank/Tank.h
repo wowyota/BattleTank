@@ -5,10 +5,6 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h" // Keep this line at last include
 
-class UTankBarrel;
-class UAimComponent;
-class AProjectile;
-
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -19,34 +15,18 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UAimComponent* AimComponent; 
+	// Called by engine when actor damage is dealt
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
-	TSubclassOf<AProjectile> Projectile;
+	UPROPERTY(EditAnywhere,Category = "Tank")
+	int32 StartHealth = 100.f;
 
-	UTankBarrel* Barrel;
+	UPROPERTY(EditAnywhere, Category = "Tank")
+	int32 CurrentHealth = 100.f;
 
-	UFUNCTION(BlueprintCallable, Category = Tank)
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
-	UFUNCTION(BlueprintCallable, Category = Tank)
-	void SetTurretReference(UTankTurret* TurretToSet);
-
-	UFUNCTION(BlueprintCallable, Category = Tank)
-	void Fire();
-
-
-
-
-public:
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
-	void AimAt(const FVector &AimLocation);
-
+	UFUNCTION(BlueprintPure, Category = "Tank")
+	float GetHealthPercent() const;
 };

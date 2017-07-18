@@ -22,7 +22,11 @@ void UAimComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	if(!ProjectileBlueprint)
+		UE_LOG(LogTemp,Error,TEXT("Projectile_BP missing"))
+
+	// So that first fire is after initial reload
+	LastFireTime = FPlatformTime::Seconds();
 	
 }
 
@@ -32,7 +36,26 @@ void UAimComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (NowAmmo <= 0)
+	{
+		FiringState = EFiringState::OutOfAmmo;
+		return;
+	}
+
+	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTime)
+	{
+		FiringState = EFiringState::Reloading;
+		return;
+	}
+
+	if (IsBarrelMoving())
+	{
+		FiringState = EFiringState::Aiming;
+	}
+	else
+	{
+		FiringState = EFiringState::Locked;
+	}
 }
 
 void UAimComponent::AimAt(const FVector &AimLocation)
@@ -40,11 +63,10 @@ void UAimComponent::AimAt(const FVector &AimLocation)
 	if (!Barrel || !Turret)
 		return;
 
-	FVector TossVelocity; // Out parameter
+	FVector TossVelocity; // Out parameter, its VectorLength is gonna to be LaunchSpeed.
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	FVector EndLocation = AimLocation;
 	float TossSpeed = LaunchSpeed;
-	bool bDrawDebug = true;
 
 	// For more detail, see https://docs.unrealengine.com/latest/INT/API/Runtime/Engine/Kismet/UGameplayStatics/SuggestProjectileVelocity/index.html and https://docs.unrealengine.com/latest/INT/BlueprintAPI/Game/Components/ProjectileMovement/SuggestProjectileVelocity/index.html
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
@@ -62,56 +84,109 @@ void UAimComponent::AimAt(const FVector &AimLocation)
 		bDrawDebugLineProjectileTrace // Draw debug line
 	);
 
+	AimDirection = TossVelocity.GetSafeNormal();
+	MoveBarrelTowards(AimDirection);
+	MoveTurretTowards(AimDirection);
+
 	if (bHaveAimSolution)
 	{
 
-		FVector AimDirection = TossVelocity.GetSafeNormal();
-		MoveBarrelTowards(AimDirection);
-		MoveTurretTowards(AimDirection);
+		//AimDirection = TossVelocity.GetSafeNormal();
+		//MoveBarrelTowards(AimDirection);
+		//MoveTurretTowards(AimDirection);
+		//UE_LOG(LogTemp, Warning, TEXT("%f: Solution found."), GetWorld()->GetTimeSeconds());
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%f: No solution."), GetWorld()->GetTimeSeconds());
+		// The code couldn't run into this else branch.
+		//UE_LOG(LogTemp, Warning, TEXT("%f: No solution."), GetWorld()->GetTimeSeconds());
 	}
 
-
 }
 
-
-void UAimComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
-{
-	Barrel = BarrelToSet;
-}
 
 // Calculate the difference between current barrel rotation and AimDirection
 // If the difference is not 0, then Barrel's moving speed is not 0 either.
-void UAimComponent::MoveBarrelTowards(const FVector &AimDirection)
+void UAimComponent::MoveBarrelTowards(const FVector &Direction)
 {
 	/// Calculate
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
-	FRotator AimAsRotator = AimDirection.Rotation();
+	FRotator AimAsRotator = Direction.Rotation();
 	FRotator DeltaRotator = AimAsRotator - BarrelRotator;
 	
 	// Move
 	Barrel->Elevate(DeltaRotator.Pitch);
-}
 
 
-void UAimComponent::SetTurretReference(UTankTurret* TurretToSet)
-{
-	Turret = TurretToSet;
 }
+
 
 // Calculate the difference between current Turret rotation and AimDirection
 // If the difference is not 0, then Turret's moving speed is not 0 either.
-void UAimComponent::MoveTurretTowards(const FVector &AimDirection)
+void UAimComponent::MoveTurretTowards(const FVector &Direction)
 {
 	/// Calculate
 	FRotator TurretRotator = Turret->GetForwardVector().Rotation();
-	FRotator AimAsRotator = AimDirection.Rotation();
+	FRotator AimAsRotator = Direction.Rotation();
 	FRotator DeltaRotator = AimAsRotator - TurretRotator;
 
 	// Move
-	Turret->Rotate(DeltaRotator.Yaw);
+	auto  DeltaRotatorYaw = DeltaRotator.Yaw;
+	
+	if (DeltaRotatorYaw < -180)// This branch keep it rotate the shortest way
+	{
+		DeltaRotatorYaw += 360;
+	}
+	else if(DeltaRotatorYaw>180)
+	{
+		DeltaRotatorYaw -= 360;
+	}
+
+	Turret->Rotate(DeltaRotatorYaw);
 }
 
+void UAimComponent::Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
+{
+	Barrel = BarrelToSet;
+	Turret = TurretToSet;
+}
+
+
+void UAimComponent::Fire()
+{
+
+	if (!Barrel) return;
+	if (!ProjectileBlueprint)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Projectile_BP missing"));
+		return;
+	}
+	if (FiringState == EFiringState::Reloading || FiringState == EFiringState::OutOfAmmo)
+		return;
+
+
+
+	double NowTime = FPlatformTime::Seconds();
+
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+		ProjectileBlueprint,
+		Barrel->GetSocketLocation(FName("Projectile")),
+		Barrel->GetSocketRotation(FName("Projectile"))
+		);
+
+	Projectile->LaunchProjectile(LaunchSpeed);
+	NowAmmo--;
+	LastFireTime = NowTime;
+}
+
+EFiringState UAimComponent::GetFiringState() const
+{
+	return FiringState;
+}
+
+bool UAimComponent::IsBarrelMoving()
+{
+	if (!Barrel) return false;
+	FVector BarrelForward = Barrel->GetForwardVector();
+	return !BarrelForward.Equals(AimDirection, 0.02f);
+}

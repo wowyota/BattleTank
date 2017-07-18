@@ -5,8 +5,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-class ATank;
-
+class UAimComponent;
 /**
  * 
  */
@@ -16,21 +15,22 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	ATank* GetControlledTank() const;
 	
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
+
+
 
 	void AimTowardsCrosshair();
 
 	UFUNCTION(BlueprintCallable, Category = Tank)
 	bool GetSightRayHitLocation(FVector &HitLocation) const;
 
-	UPROPERTY(EditAnywhere, Category = Tank)
+	UPROPERTY(EditDefaultsOnly, Category = Tank)
 	float CrosshairXLocation = 0.5;
 	
-	UPROPERTY(EditAnywhere, Category = Tank)
+	UPROPERTY(EditDefaultsOnly, Category = Tank)
 	float CrosshairYLocation = 1.0f / 3.0f;
 
 	UPROPERTY(EditAnywhere, Category = Tank)
@@ -39,5 +39,14 @@ public:
 	bool GetLookDirection(FVector &LookDirection) const;
 
 	bool GetLookHitLocation(const FVector &LookDirection, FVector &HitLocation) const;
+
+
+
+	UAimComponent* AimComponent;
+
+	// If we found AimComponent, then we will set UI (of course in blueprint) 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Tank")
+	void FoundAimComponent(UAimComponent* AimComponent);
+
 
 };
