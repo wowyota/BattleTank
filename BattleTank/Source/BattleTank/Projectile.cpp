@@ -36,6 +36,7 @@ void AProjectile::BeginPlay()
 
 	CollisionMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 	
+	
 }
 
 // Called every frame
@@ -63,6 +64,7 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 		TArray<AActor *>() // damage all actors	 
 	);
 
+	PlayBlastSound();
 
 	FTimerHandle Timer;
 	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectile::OnTimerExpire, DestroyDelay, false);

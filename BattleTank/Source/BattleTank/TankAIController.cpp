@@ -11,12 +11,14 @@ void ATankAIController::BeginPlay()
 
 	ControlledTank = GetPawn(); 
 	PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
-	AimComponent = GetPawn()->FindComponentByClass<UAimComponent>();
+	if(ControlledTank)
+		AimComponent = ControlledTank->FindComponentByClass<UAimComponent>();
 
 	if (!PlayerTank || !ControlledTank || !AimComponent)
 	{
-		UE_LOG(LogTemp, Error, TEXT("ATankAIController cannot find AimComponent, PlayerTank or ControlledTank."), *PlayerTank->GetName());
+		UE_LOG(LogTemp, Error, TEXT("ATankAIController cannot find AimComponent, PlayerTank or ControlledTank."));
 	}
+
 
 }
 
@@ -25,7 +27,15 @@ void ATankAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (!PlayerTank || !ControlledTank || !AimComponent)
-		return;
+	{
+		ControlledTank = GetPawn();
+		PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+		if (ControlledTank)
+			AimComponent = ControlledTank->FindComponentByClass<UAimComponent>();
+		if (!PlayerTank || !ControlledTank || !AimComponent)
+			return;
+	}
+
 
 	
 	// Move towards player
@@ -37,6 +47,9 @@ void ATankAIController::Tick(float DeltaTime)
 	// Fire
 	if(AimComponent->GetFiringState() == EFiringState::Locked)
 		AimComponent->Fire();
+
+	//UE_LOG(LogTemp, Warning, TEXT("GetFiringState."), *GetName(), *ControlledTank->GetName());
+
 
 }
 
@@ -55,8 +68,32 @@ void ATankAIController::SetPawn(APawn* InPawn)
 
 void ATankAIController::OnPossedTankDeath()
 {
-	if (!ControlledTank) return;
+
+	if (!PlayerTank || !ControlledTank || !AimComponent)
+	{
+		ControlledTank = GetPawn();
+		PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+		if (ControlledTank)
+			AimComponent = ControlledTank->FindComponentByClass<UAimComponent>();
+		if (!PlayerTank || !ControlledTank || !AimComponent)
+			return;
+	}
+
 	ControlledTank->DetachFromControllerPendingDestroy();
 	UE_LOG(LogTemp, Warning, TEXT("%s die."), *GetName());
 
 }
+//
+//APawn* ATankAIController::FindEnemyTank(ETeam EnemyTeam)
+//{
+//	// Indexed Container Iterator
+//	// conversion to "bool" returning true if the iterator has not reached the last element.
+//	auto PawnIterator = GetWorld()->GetPawnIterator();
+//	
+//	for (; PawnIterator; PawnIterator++)
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("I am %s, I can see %s"), *ControlledTank->GetName(), *(*PawnIterator)->GetName());
+//	}
+//
+//	return nullptr;
+//}

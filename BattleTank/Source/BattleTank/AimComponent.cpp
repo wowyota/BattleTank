@@ -22,6 +22,8 @@ void UAimComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	NowAmmo = TotalAmmo;
+
 	if(!ProjectileBlueprint)
 		UE_LOG(LogTemp,Error,TEXT("Projectile_BP missing"))
 
@@ -154,6 +156,7 @@ void UAimComponent::Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSe
 
 void UAimComponent::Fire()
 {
+	UE_LOG(LogTemp, Error, TEXT("!!!!!!!!!!!!!!!!!"));
 
 	if (!Barrel) return;
 	if (!ProjectileBlueprint)
@@ -173,6 +176,7 @@ void UAimComponent::Fire()
 		Barrel->GetSocketLocation(FName("Projectile")),
 		Barrel->GetSocketRotation(FName("Projectile"))
 		);
+
 
 	Projectile->LaunchProjectile(LaunchSpeed);
 	NowAmmo--;

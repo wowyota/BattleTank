@@ -7,7 +7,6 @@
 #include "TankBarrel.h"
 #include "AimComponent.generated.h"
 
-
 UENUM()
 enum class EFiringState :uint8
 {
@@ -101,5 +100,9 @@ public:
 	int TotalAmmo = 10;
 
 	UPROPERTY(EditAnywhere, Category = "Tank")
-	int NowAmmo = TotalAmmo;
+	int NowAmmo; // Initialized in BeginPlay
+
+
+
+
 };

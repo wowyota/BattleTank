@@ -24,7 +24,8 @@ public:
 
 	void LaunchProjectile(const float Speed) const;
 
-private:
+
+
 	UProjectileMovementComponent* ProjectileMovement;
 
 	UPROPERTY(VisibleAnywhere,Category = "Tank")
@@ -49,4 +50,11 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Tank")
 	float ProjectileDamage = 20.f;
+
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Tank")
+	void PlayBlastSound();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Tank")
+	void PlayLaunchSound();
 };
