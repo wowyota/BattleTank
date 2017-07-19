@@ -1,4 +1,4 @@
- ![Banner](/BattleTank/Pictures/banner.jpg)
+ ![Banner](/BattleTank/Pictures/Banner.jpg)
 
 # Battle Tank
 
