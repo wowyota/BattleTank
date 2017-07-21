@@ -38,10 +38,18 @@ Now, in this version, player can drive a tank which looks powerful but actually 
 ## To Do list
 
 * Divide camp, with different UI, with camp damage
+
 * Flexible and changeable AI setting 
+
 * ~~Better UI~~
+
+* New Peojectile Static Mesh 
+
 * More kinds of Attacking ways
+
 * More kinds of AI Pawn
+
+  ​
 
 
 
@@ -49,10 +57,27 @@ Now, in this version, player can drive a tank which looks powerful but actually 
 ## Doing
 
 * Dividing Camp.
+
+  * ~~CampComponent.h~~
+  * ~~FindEnemyTank()~~
+
+
+  * Camp damage
+
+* ~~Better UI~~
+
   * ~~Different camp health bar~~ 
   * ~~Player UI~~
-  * A better way to spawn AI Tank and AI Controller.
-  * And garbage collection, to collect dead Controller and Tank
+
+* A better way to spawn AI Tank and AI Controller.
+
+  * ~~Spawn in blueprint~~
+  * Move logic to Cpp
+
+* And garbage collection, to collect dead Controller and Tank
+
+  * Implement in Blueprint
+  * Move logic to Cpp
 
 
 
@@ -61,7 +86,7 @@ Now, in this version, player can drive a tank which looks powerful but actually 
 
 
 
-## Some Screenshots
+## Screenshots
 
 ![](/BattleTank/Pictures/Game.png)
 
