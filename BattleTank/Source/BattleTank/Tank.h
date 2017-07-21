@@ -30,6 +30,11 @@ public:
 	int32 CurrentHealth; // Initialized in BeignPlay
 
 	UFUNCTION(BlueprintPure, Category = "Tank")
+	int32 GetStartHealth() const { return StartHealth; }
+	UFUNCTION(BlueprintPure, Category = "Tank")
+	int32 GetCurrentHealth()  const { return CurrentHealth; }
+
+	UFUNCTION(BlueprintPure, Category = "Tank")
 	float GetHealthPercent() const;
 
 

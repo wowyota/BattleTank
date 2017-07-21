@@ -2,6 +2,7 @@
 
 #include "BattleTank.h"
 #include "AimComponent.h"
+#include "CampComponent.h"
 #include "TankPlayerController.h"
 #include "Tank.h" // used in Delegate ATank.onDeath
 
@@ -9,8 +10,12 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CampComponent = GetPawn()->FindComponentByClass<UCampComponent>();
+
 	AimComponent = GetPawn()->FindComponentByClass<UAimComponent>();
-	FoundAimComponent(AimComponent);
+
+
+	SetPlayerUI();
 
 }
 

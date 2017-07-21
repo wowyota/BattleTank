@@ -6,6 +6,8 @@
 #include "TankPlayerController.generated.h"
 
 class UAimComponent;
+class UCampComponent;
+class ATank;
 /**
  * 
  */
@@ -43,10 +45,11 @@ public:
 
 
 	UAimComponent* AimComponent;
+	UCampComponent* CampComponent;
 
 	// If we found AimComponent, then we will set UI (of course in blueprint) 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Tank")
-	void FoundAimComponent(UAimComponent* AimComponent);
+	void SetPlayerUI();
 
 
 	// It's called when the Pawn gets possessed.

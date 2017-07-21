@@ -48,44 +48,57 @@ APawn* UCampComponent::FindEnemyTank()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("I am %s, I can see %s"), *GetOwner()->GetName(), *(*PawnIterator)->GetName());
 
-		if (PawnIterator) // If found 'someone'
+		if (PawnIterator) 
 		{
 			UnKnownController = (*PawnIterator)->GetController();
 
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("%s don't have a Controller"), *(*PawnIterator)->GetName());
-		}
-
-		if (UnKnownController) // If found 'someone'
-		{
-			UnknownCampComponent = UnKnownController->FindComponentByClass<UCampComponent>();
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("%s don't have a Camp"), *(*PawnIterator)->GetName());
-		}
-
-
-		if (UnknownCampComponent && UnknownCampComponent->SelfCamp == EnemyCamp) // If 'someone' were enemy
-		{
-			UE_LOG(LogTemp, Warning, TEXT("%s is my enemy"), *(*PawnIterator)->GetName());
-			UnknownTank = Cast<ATank>(*PawnIterator);
-			if (UnknownTank && UnknownTank->CurrentHealth > 0)
+			if (UnKnownController)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("%s is alive"), *(*PawnIterator)->GetName());
-				return UnknownTank;
+				UnknownCampComponent = UnKnownController->FindComponentByClass<UCampComponent>();
+
+				if (UnknownCampComponent) // If found 'someone'
+				{
+
+					if (UnknownCampComponent->SelfCamp == EnemyCamp) // If 'someone' were enemy
+					{
+						UE_LOG(LogTemp, Warning, TEXT("%s is my enemy"), *(*PawnIterator)->GetName());
+						UnknownTank = Cast<ATank>(*PawnIterator);
+						if (UnknownTank && UnknownTank->CurrentHealth > 0)
+						{
+							UE_LOG(LogTemp, Warning, TEXT("my enemy %s is alive"), *(*PawnIterator)->GetName());
+							return UnknownTank;
+						}
+						else
+						{
+							UE_LOG(LogTemp, Warning, TEXT("my enemy %s is dead"), *(*PawnIterator)->GetName());
+						}
+					}
+					else if (UnknownCampComponent && !(UnknownCampComponent->SelfCamp == EnemyCamp))
+					{
+						UE_LOG(LogTemp, Warning, TEXT("%s is my friend"), *(*PawnIterator)->GetName());
+					}
+				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("%s don't have a CampComponent"), *(*PawnIterator)->GetName());
+				}
+
+
 			}
 			else
 			{
-				UE_LOG(LogTemp, Warning, TEXT("%s is dead"), *(*PawnIterator)->GetName());
+				UE_LOG(LogTemp, Warning, TEXT("%s don't have a Controller"), *(*PawnIterator)->GetName());
 			}
+
 		}
-		else if (UnknownCampComponent && !(UnknownCampComponent->SelfCamp == EnemyCamp))
+		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%s is my friend"), *(*PawnIterator)->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("%s fail to get into PawnIterator"), *(*PawnIterator)->GetName());
 		}
+
+
+
+
 	}
 	
 	return nullptr;
