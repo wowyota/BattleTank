@@ -5,15 +5,10 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-// UENUM()
-// enum class ECamp :uint8
-// {
-// 	A,
-// 	B
-// };
-
 
 class UAimComponent;
+class UCampComponent;
+
 /**
  * 
  */
@@ -32,6 +27,10 @@ public:
 	APawn* ControlledTank;
 	APawn* PlayerTank;
 	UAimComponent* AimComponent;
+	UCampComponent* CampComponent;
+
+	void Initialize();
+	bool Ensure();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Tank")
 	bool bAIOpenTick = true;
@@ -46,14 +45,5 @@ public:
 
 	UFUNCTION()
 	void OnPossedTankDeath();
-
-
-	// TODO divide camp
-	//UPROPERTY(EditAnywhere, Category = "Tank")
-	//ECamp Camp = ECamp::A;
-
-	// TODO make it work, so that AI can attack AI
-	//UFUNCTION(BlueprintCallable,Category = "Tank")
-	//APawn* FindEnemyTank(ECamp EnemyCamp);
 
 };

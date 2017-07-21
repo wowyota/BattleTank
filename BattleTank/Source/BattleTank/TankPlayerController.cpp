@@ -107,4 +107,6 @@ void ATankPlayerController::OnPossedTankDeath()
 
 	// Player cannot control tank anymore
 	StartSpectatingOnly();
+
+
 }

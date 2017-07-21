@@ -92,6 +92,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Tank")
 	EFiringState FiringState = EFiringState::Aiming;
 
+	UFUNCTION(BlueprintCallable, Category = "Tank")
 	EFiringState GetFiringState() const;
 
 	bool IsBarrelMoving();

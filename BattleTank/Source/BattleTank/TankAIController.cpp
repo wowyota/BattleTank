@@ -2,21 +2,59 @@
 
 #include "BattleTank.h"
 #include "AimComponent.h"
+#include "CampComponent.h"
 #include "TankAIController.h"
 #include "Tank.h" // used in Delegate ATank.onDeath
+
+void ATankAIController::Initialize()
+{
+	ControlledTank = GetPawn();
+	if (ControlledTank)
+	{
+		AimComponent = ControlledTank->FindComponentByClass<UAimComponent>(); // Find means you add a component in BP, and then find it
+	}
+	PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+	CampComponent = FindComponentByClass<UCampComponent>();
+
+}
+
+bool ATankAIController::Ensure()
+{
+	if (!PlayerTank || !ControlledTank || !AimComponent || !CampComponent)
+	{
+		if (!PlayerTank)
+		{
+			UE_LOG(LogTemp, Error, TEXT("%s cannot find PlayerTank."), *GetName());
+		}
+		if (!ControlledTank)
+		{
+			UE_LOG(LogTemp, Error, TEXT("%s cannot find ControlledTank."), *GetName());
+		}
+		if (!AimComponent)
+		{
+			UE_LOG(LogTemp, Error, TEXT("%s cannot find AimComponent."), *GetName());
+		}
+		if (!CampComponent)
+		{
+			UE_LOG(LogTemp, Error, TEXT("%s cannot find CampComponent."), *GetName());
+		}
+		return false;
+
+	}
+	else
+		return true;
+}
 
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ControlledTank = GetPawn(); 
-	PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if(ControlledTank)
-		AimComponent = ControlledTank->FindComponentByClass<UAimComponent>();
+	Initialize();
 
-	if (!PlayerTank || !ControlledTank || !AimComponent)
+
+	if (!Ensure())
 	{
-		UE_LOG(LogTemp, Error, TEXT("ATankAIController cannot find AimComponent, PlayerTank or ControlledTank."));
+		return;
 	}
 
 
@@ -26,23 +64,33 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!PlayerTank || !ControlledTank || !AimComponent)
+	if (!Ensure())
 	{
-		ControlledTank = GetPawn();
-		PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
-		if (ControlledTank)
-			AimComponent = ControlledTank->FindComponentByClass<UAimComponent>();
-		if (!PlayerTank || !ControlledTank || !AimComponent)
+		Initialize();
+
+		if (!Ensure())
+		{
 			return;
+		}
+
 	}
 
 
-	
-	// Move towards player
-	MoveToActor(PlayerTank, AcceptanceRadius);
+	// Find Enemy
+	auto EnemyTank = CampComponent->FindEnemyTank();
 
-	// Aim at player
-	AimComponent->AimAt(PlayerTank->GetActorLocation());
+	if (!EnemyTank)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s cannot find EnemyTank."), *GetName());
+		return;
+	}
+
+	// Move towards Enemy
+	MoveToActor(EnemyTank, AcceptanceRadius);	
+
+	if (!EnemyTank) return;
+	// Aim at EnemyTank
+	AimComponent->AimAt(EnemyTank->GetActorLocation());
 
 	// Fire
 	if(AimComponent->GetFiringState() == EFiringState::Locked)
@@ -69,31 +117,18 @@ void ATankAIController::SetPawn(APawn* InPawn)
 void ATankAIController::OnPossedTankDeath()
 {
 
-	if (!PlayerTank || !ControlledTank || !AimComponent)
+	if (!Ensure())
 	{
-		ControlledTank = GetPawn();
-		PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
-		if (ControlledTank)
-			AimComponent = ControlledTank->FindComponentByClass<UAimComponent>();
-		if (!PlayerTank || !ControlledTank || !AimComponent)
+		Initialize();
+
+		if (!Ensure())
+		{
 			return;
+		}
 	}
 
 	ControlledTank->DetachFromControllerPendingDestroy();
 	UE_LOG(LogTemp, Warning, TEXT("%s die."), *GetName());
 
 }
-//
-//APawn* ATankAIController::FindEnemyTank(ETeam EnemyTeam)
-//{
-//	// Indexed Container Iterator
-//	// conversion to "bool" returning true if the iterator has not reached the last element.
-//	auto PawnIterator = GetWorld()->GetPawnIterator();
-//	
-//	for (; PawnIterator; PawnIterator++)
-//	{
-//		UE_LOG(LogTemp, Warning, TEXT("I am %s, I can see %s"), *ControlledTank->GetName(), *(*PawnIterator)->GetName());
-//	}
-//
-//	return nullptr;
-//}
+
