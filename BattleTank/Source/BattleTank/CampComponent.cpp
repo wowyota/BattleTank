@@ -46,7 +46,6 @@ APawn* UCampComponent::FindEnemyTank()
 
 	for (; PawnIterator; PawnIterator++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("I am %s, I can see %s"), *GetOwner()->GetName(), *(*PawnIterator)->GetName());
 
 		if (PawnIterator) 
 		{
@@ -56,16 +55,16 @@ APawn* UCampComponent::FindEnemyTank()
 			{
 				UnknownCampComponent = UnKnownController->FindComponentByClass<UCampComponent>();
 
-				if (UnknownCampComponent) // If found 'someone'
+				if (UnknownCampComponent)
 				{
 
-					if (UnknownCampComponent->SelfCamp == EnemyCamp) // If 'someone' were enemy
+					if (UnknownCampComponent->SelfCamp == EnemyCamp)
 					{
 						UE_LOG(LogTemp, Warning, TEXT("%s is my enemy"), *(*PawnIterator)->GetName());
 						UnknownTank = Cast<ATank>(*PawnIterator);
 						if (UnknownTank && UnknownTank->CurrentHealth > 0)
 						{
-							UE_LOG(LogTemp, Warning, TEXT("my enemy %s is alive"), *(*PawnIterator)->GetName());
+							UE_LOG(LogTemp, Warning, TEXT("I am %s, my enemy %s"), *GetOwner()->GetName(), *(*PawnIterator)->GetName());
 							return UnknownTank;
 						}
 						else
@@ -82,8 +81,6 @@ APawn* UCampComponent::FindEnemyTank()
 				{
 					UE_LOG(LogTemp, Warning, TEXT("%s don't have a CampComponent"), *(*PawnIterator)->GetName());
 				}
-
-
 			}
 			else
 			{
@@ -95,10 +92,6 @@ APawn* UCampComponent::FindEnemyTank()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("%s fail to get into PawnIterator"), *(*PawnIterator)->GetName());
 		}
-
-
-
-
 	}
 	
 	return nullptr;

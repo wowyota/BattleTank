@@ -43,7 +43,7 @@ Now, in this version, player can drive a tank which looks powerful but actually 
 
 * ~~Better UI~~
 
-* New Peojectile Static Mesh 
+* ~~New Peojectile Static Mesh~~
 
 * More kinds of Attacking ways
 
@@ -79,6 +79,14 @@ Now, in this version, player can drive a tank which looks powerful but actually 
   * Implement in Blueprint
   * Move logic to Cpp
 
+* More kinds of AI Pawn
+
+  * ~~new tank~~ 
+
+
+  * ~~mortar~~
+  * new type
+
 
 
 
@@ -91,3 +99,7 @@ Now, in this version, player can drive a tank which looks powerful but actually 
 ![](/BattleTank/Pictures/Game.png)
 
 ![](/BattleTank/Pictures/Game5.png)
+
+![](/BattleTank/Pictures/Game6.png)
+
+![](/BattleTank/Pictures/Game7.png)

@@ -3,8 +3,7 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
-#include "Projectile.h"
-#include "TankBarrel.h"
+#include "Projectile.h" // ProjectileBlueprint
 #include "AimComponent.generated.h"
 
 UENUM()
@@ -19,7 +18,6 @@ enum class EFiringState :uint8
 
 class UTankBarrel;
 class UTankTurret;
-class AProjectile;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))

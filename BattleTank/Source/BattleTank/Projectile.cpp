@@ -33,7 +33,7 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-
+	PlayLaunchSound();
 	CollisionMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 	
 	
@@ -49,12 +49,25 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & HitResult)
 {
 	ImpactBlast->Activate();
+	PlayBlastSound();
 	LaunchBlast->Deactivate();
+
+	// OutComponents[1] is the outlook of projectile
+	TArray<UStaticMeshComponent*> OutComponents;
+	GetComponents(OutComponents);	
+	if(OutComponents[1])
+		OutComponents[1]->SetVisibility(false);
+	
+
+
+	// Explosion causes movement
 	ExplosionForce->FireImpulse();
 
+	// Prepare to destroy self
 	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
 
+	// Apply damage
 	UGameplayStatics::ApplyRadialDamage(
 		this,
 		ProjectileDamage,
@@ -64,8 +77,8 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 		TArray<AActor *>() // damage all actors	 
 	);
 
-	PlayBlastSound();
-
+	
+	// Destory self after DestroyDelay second.
 	FTimerHandle Timer;
 	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectile::OnTimerExpire, DestroyDelay, false);
 }
